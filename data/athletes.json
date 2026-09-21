@@ -5,43 +5,43 @@
       "id": "karsten-warholm",
       "name": "Karsten Warholm",
       "country": "Norway",
-      "birth_date": null,
+      "birth_date": "1996-02-28",
       "primary_event": "300 Metres Hurdles",
       "medals": {
-        "world_gold": 0,
+        "olympic_bronze": 0,
         "olympic_silver": 0,
         "olympic_gold": 0,
-        "olympic_bronze": 0,
+        "world_bronze": 0,
         "world_silver": 0,
-        "world_bronze": 0
+        "world_gold": 0
       },
       "status": "active",
       "personal_bests": [
         {
           "event": "400 Metres Hurdles",
           "result": "45.94",
-          "record": "",
+          "record": "WR AR NR",
           "score": 1341,
           "date": "2021-08-03"
         },
         {
           "event": "300 Metres Hurdles",
           "result": "32.67",
-          "record": "",
+          "record": "WBP ABP NBP",
           "score": 1319,
           "date": "2025-06-12"
         },
         {
           "event": "400 Metres Short Track",
           "result": "45.05",
-          "record": "",
+          "record": "NR",
           "score": 1239,
           "date": "2019-03-02"
         },
         {
           "event": "4x400 Metres Relay Mixed",
           "result": "3:09.62",
-          "record": "",
+          "record": "NR",
           "score": 1209,
           "date": "2026-08-10"
         },
@@ -59,22 +59,22 @@
       "id": "armand-duplantis",
       "name": "Armand Duplantis",
       "country": "Sweden",
-      "birth_date": null,
+      "birth_date": "1999-11-10",
       "primary_event": "Pole Vault",
       "medals": {
-        "world_gold": 0,
+        "olympic_bronze": 0,
         "olympic_silver": 0,
         "olympic_gold": 0,
-        "olympic_bronze": 0,
+        "world_bronze": 0,
         "world_silver": 0,
-        "world_bronze": 0
+        "world_gold": 0
       },
       "status": "active",
       "personal_bests": [
         {
           "event": "Pole Vault",
           "result": "6.31",
-          "record": "",
+          "record": "WR AR NR",
           "score": 1353,
           "date": "2026-03-12"
         },
@@ -106,50 +106,50 @@
       "id": "jakob-ingebrigtsen",
       "name": "Jakob Ingebrigtsen",
       "country": "Norway",
-      "birth_date": null,
+      "birth_date": "2000-09-19",
       "primary_event": "5 Kilometres Road",
       "medals": {
-        "world_gold": 0,
+        "olympic_bronze": 0,
         "olympic_silver": 0,
         "olympic_gold": 0,
-        "olympic_bronze": 0,
+        "world_bronze": 0,
         "world_silver": 0,
-        "world_bronze": 0
+        "world_gold": 0
       },
       "status": "active",
       "personal_bests": [
         {
           "event": "Mile Short Track",
           "result": "3:45.14",
-          "record": "",
+          "record": "WR AR NR",
           "score": 1330,
           "date": "2025-02-13"
         },
         {
           "event": "3000 Metres",
           "result": "7:17.55",
-          "record": "",
+          "record": "WR AR NR",
           "score": 1320,
           "date": "2024-08-25"
         },
         {
           "event": "2000 Metres",
           "result": "4:43.13",
-          "record": "",
+          "record": "WR AR NBP",
           "score": 1307,
           "date": "2023-09-08"
         },
         {
           "event": "1500 Metres Short Track",
           "result": "3:29.63",
-          "record": "",
+          "record": "WR AR NR",
           "score": 1306,
           "date": "2025-02-13"
         },
         {
           "event": "2 Miles",
           "result": "7:54.10",
-          "record": "",
+          "record": "WBP ABP NBP",
           "score": 1304,
           "date": "2023-06-09"
         }
@@ -160,29 +160,29 @@
       "id": "noah-lyles",
       "name": "Noah Lyles",
       "country": "United States",
-      "birth_date": null,
+      "birth_date": "1997-07-18",
       "primary_event": "150 Metres",
       "medals": {
-        "world_gold": 0,
+        "olympic_bronze": 0,
         "olympic_silver": 0,
         "olympic_gold": 0,
-        "olympic_bronze": 0,
+        "world_bronze": 0,
         "world_silver": 0,
-        "world_bronze": 0
+        "world_gold": 0
       },
       "status": "active",
       "personal_bests": [
         {
           "event": "200 Metres",
           "result": "19.31",
-          "record": "",
+          "record": "NR",
           "score": 1331,
           "date": "2022-07-21"
         },
         {
           "event": "4x100 Metres Relay",
           "result": "37.10",
-          "record": "",
+          "record": "NR",
           "score": 1297,
           "date": "2019-10-05"
         },
@@ -194,14 +194,7 @@
           "date": "2024-08-04"
         },
         {
-          "event": "100 Metres",
-          "result": "9.79",
-          "record": "=",
-          "score": 1280,
-          "date": "2026-07-24"
-        },
-        {
-          "event": "100 Metres",
+          "event": "100 Metres Result 9.79= Date 24 JUL 2026 Score 1280 100 Metres",
           "result": "9.76",
           "record": "*",
           "score": 1279,
@@ -214,36 +207,36 @@
       "id": "sydney-mclaughlin-levrone",
       "name": "Sydney Mclaughlin-Levrone",
       "country": "United States",
-      "birth_date": null,
+      "birth_date": "1999-08-07",
       "primary_event": "400 Metres",
       "medals": {
-        "world_gold": 0,
+        "olympic_bronze": 0,
         "olympic_silver": 0,
         "olympic_gold": 0,
-        "olympic_bronze": 0,
+        "world_bronze": 0,
         "world_silver": 0,
-        "world_bronze": 0
+        "world_gold": 0
       },
       "status": "active",
       "personal_bests": [
         {
           "event": "400 Metres Hurdles",
           "result": "50.37",
-          "record": "",
+          "record": "WR AR NR",
           "score": 1322,
           "date": "2024-08-08"
         },
         {
           "event": "400 Metres",
           "result": "47.78",
-          "record": "",
+          "record": "AR NR",
           "score": 1296,
           "date": "2025-09-18"
         },
         {
           "event": "4x400 Metres Relay",
           "result": "3:15.27",
-          "record": "",
+          "record": "AR NR",
           "score": 1266,
           "date": "2024-08-10"
         },
@@ -253,13 +246,6 @@
           "record": "",
           "score": 1231,
           "date": "2024-05-18"
-        },
-        {
-          "event": "400 Metres Short Track",
-          "result": "50.36",
-          "record": "",
-          "score": 1224,
-          "date": "2018-03-10"
         }
       ],
       "profile_url": "https://worldathletics.org/athletes/united-states/sydney-mclaughlin-14624749"
@@ -268,29 +254,29 @@
       "id": "sander-skotheim",
       "name": "Sander Skotheim",
       "country": "Norway",
-      "birth_date": null,
+      "birth_date": "2002-05-31",
       "primary_event": "100 Metres",
       "medals": {
-        "world_gold": 0,
+        "olympic_bronze": 0,
         "olympic_silver": 0,
         "olympic_gold": 0,
-        "olympic_bronze": 0,
+        "world_bronze": 0,
         "world_silver": 0,
-        "world_bronze": 0
+        "world_gold": 0
       },
       "status": "active",
       "personal_bests": [
         {
           "event": "Decathlon",
           "result": "8909",
-          "record": "",
+          "record": "NR",
           "score": 1268,
           "date": "2025-06-01"
         },
         {
           "event": "Heptathlon Short Track",
           "result": "6558",
-          "record": "",
+          "record": "NR",
           "score": 1251,
           "date": "2025-03-08"
         },
@@ -322,22 +308,22 @@
       "id": "femke-broeders-bol",
       "name": "Femke Broeders-Bol",
       "country": "Netherlands",
-      "birth_date": null,
+      "birth_date": "2000-02-23",
       "primary_event": "800 Metres",
       "medals": {
-        "world_gold": 0,
+        "olympic_bronze": 0,
         "olympic_silver": 0,
         "olympic_gold": 0,
-        "olympic_bronze": 0,
+        "world_bronze": 0,
         "world_silver": 0,
-        "world_bronze": 0
+        "world_gold": 0
       },
       "status": "active",
       "personal_bests": [
         {
           "event": "400 Metres Hurdles",
           "result": "50.95",
-          "record": "",
+          "record": "AR NR",
           "score": 1303,
           "date": "2024-07-14"
         },
@@ -351,21 +337,21 @@
         {
           "event": "400 Metres Short Track",
           "result": "49.17",
-          "record": "",
+          "record": "WR AR NR",
           "score": 1272,
           "date": "2024-03-02"
         },
         {
           "event": "800 Metres",
           "result": "1:54.71",
-          "record": "",
+          "record": "NR",
           "score": 1259,
           "date": "2026-08-27"
         },
         {
           "event": "300 Metres Hurdles",
           "result": "36.86",
-          "record": "",
+          "record": "WBP ABP NBP",
           "score": 1236,
           "date": "2022-05-31"
         }
@@ -376,22 +362,22 @@
       "id": "ryan-crouser",
       "name": "Ryan Crouser",
       "country": "United States",
-      "birth_date": null,
+      "birth_date": "1992-12-18",
       "primary_event": "Shot Put",
       "medals": {
-        "world_gold": 0,
+        "olympic_bronze": 0,
         "olympic_silver": 0,
         "olympic_gold": 0,
-        "olympic_bronze": 0,
+        "world_bronze": 0,
         "world_silver": 0,
-        "world_bronze": 0
+        "world_gold": 0
       },
       "status": "retired",
       "personal_bests": [
         {
           "event": "Shot Put",
           "result": "23.56",
-          "record": "",
+          "record": "WR AR NR",
           "score": 1334,
           "date": "2023-05-27"
         },
@@ -408,9 +394,77 @@
           "record": "",
           "score": 834,
           "date": "2009-05-23"
+        },
+        {
+          "event": "Competition & venue Eugene, OR (USA) Shot Put (5kg)",
+          "result": "22.38",
+          "record": "",
+          "score": 0,
+          "date": "2011-07-09"
+        },
+        {
+          "event": "Competition & venue Portland, OR (USA) Discus Throw (1,5kg)",
+          "result": "72.40",
+          "record": "",
+          "score": 0,
+          "date": "2011-07-09"
         }
       ],
       "profile_url": "https://worldathletics.org/athletes/united-states/ryan-crouser-14369211"
+    },
+    {
+      "id": "usain-bolt",
+      "name": "Usain Bolt",
+      "country": "Jamaica",
+      "birth_date": "1986-08-21",
+      "primary_event": "100 Metres",
+      "medals": {
+        "olympic_bronze": 0,
+        "olympic_silver": 0,
+        "olympic_gold": 0,
+        "world_bronze": 0,
+        "world_silver": 0,
+        "world_gold": 0
+      },
+      "status": "retired",
+      "personal_bests": [
+        {
+          "event": "100 Metres",
+          "result": "9.58",
+          "record": "WR AR NR",
+          "score": 1356,
+          "date": "2009-08-16"
+        },
+        {
+          "event": "200 Metres",
+          "result": "19.19",
+          "record": "WR AR NR",
+          "score": 1352,
+          "date": "2009-08-20"
+        },
+        {
+          "event": "4x100 Metres Relay",
+          "result": "36.84",
+          "record": "WR AR NR",
+          "score": 1318,
+          "date": "2012-08-11"
+        },
+        {
+          "event": "300 Metres",
+          "result": "30.97",
+          "record": "NR",
+          "score": 1259,
+          "date": "2010-05-27"
+        },
+        {
+          "event": "4x400 Metres Relay",
+          "result": "3:01.10",
+          "record": "",
+          "score": 1180,
+          "date": "2004-04-24"
+        }
+      ],
+      "profile_url": "https://worldathletics.org/athletes/jamaica/usain-bolt-14201847"
     }
   ]
 }
