@@ -1,0 +1,14 @@
+# One worldathletics.org athlete profile URL per line.
+# Lines starting with # are ignored.
+# Find more by searching "<name> worldathletics.org" or browsing
+# https://worldathletics.org/athletes and copying the profile link.
+
+https://worldathletics.org/athletes/norway/karsten-warholm-14479487
+https://worldathletics.org/athletes/sweden/armand-duplantis-14679502
+https://worldathletics.org/athletes/norway/jakob-ingebrigtsen-14653717
+https://worldathletics.org/athletes/united-states/noah-lyles-14536762
+https://worldathletics.org/athletes/united-states/sydney-mclaughlin-14624749
+https://worldathletics.org/athletes/norway/sander-skotheim-14834505
+https://worldathletics.org/athletes/netherlands/femke-bol-14707010
+https://worldathletics.org/athletes/united-states/ryan-crouser-14369211
+https://worldathletics.org/athletes/jamaica/usain-bolt-14201847

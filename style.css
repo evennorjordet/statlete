@@ -1,0 +1,216 @@
+:root {
+  --bg: #F6F5F0;
+  --ink: #1C1E1B;
+  --muted: #6B6F66;
+  --line: #D9D6CC;
+  --accent: #2B4570;
+  --accent-ink: #F6F5F0;
+  --match-ink: #2F5B3D;
+  --match-bg: #E4ECE3;
+  --partial-ink: #8A6412;
+  --partial-bg: #F3E9D1;
+  --nomatch-bg: #EDEBE3;
+  --danger: #A13E3E;
+  --radius: 3px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #17181A;
+    --ink: #EDECE6;
+    --muted: #9A9C93;
+    --line: #34362F;
+    --accent: #7FA0D6;
+    --accent-ink: #14181F;
+    --match-ink: #A9D3B4;
+    --match-bg: #223228;
+    --partial-ink: #E3C067;
+    --partial-bg: #332C18;
+    --nomatch-bg: #232420;
+    --danger: #D98888;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html { color-scheme: light dark; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+}
+
+.site-header h1 {
+  font-family: 'Barlow Condensed', ui-sans-serif, sans-serif;
+  font-weight: 700;
+  font-size: 3rem;
+  line-height: 1;
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+.tagline {
+  margin: 0.4rem 0 0;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+.lane-line {
+  border: none;
+  border-top: 2px dashed var(--line);
+  margin: 1.75rem 0 2rem;
+}
+
+h2 {
+  font-family: 'Barlow Condensed', ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: 1.3rem;
+  margin: 0 0 0.75rem;
+}
+
+#board { margin-bottom: 2.25rem; }
+
+.empty {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.ev-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.35rem;
+  border-left: 3px solid var(--line);
+  background: var(--nomatch-bg);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+}
+
+.ev-row.match { border-left-color: var(--match-ink); background: var(--match-bg); color: var(--match-ink); }
+.ev-row.partial { border-left-color: var(--partial-ink); background: var(--partial-bg); color: var(--partial-ink); }
+
+.ev-name { color: inherit; }
+.ev-val { font-variant-numeric: tabular-nums; font-weight: 500; display: flex; align-items: center; gap: 0.3rem; }
+
+.table-wrap { overflow-x: auto; margin-bottom: 1rem; }
+
+.guess-table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.guess-table th {
+  text-align: center;
+  font-weight: 500;
+  color: var(--muted);
+  font-size: 0.78rem;
+  padding: 0 0.3rem 0.4rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.guess-table th.col-name, .guess-table td.col-name { text-align: left; }
+
+.guess-table td {
+  text-align: center;
+  padding: 0.4rem 0.3rem;
+  border-bottom: 1px solid var(--line);
+  font-variant-numeric: tabular-nums;
+}
+
+.guess-table td.match { background: var(--match-bg); color: var(--match-ink); }
+.guess-table td.partial { background: var(--partial-bg); color: var(--partial-ink); }
+
+.arrow { margin-left: 0.2rem; }
+
+#guess-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+#guess-input {
+  flex: 1;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+#guess-input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+button {
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+  cursor: pointer;
+}
+
+button:hover { opacity: 0.9; }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button:disabled { opacity: 0.5; cursor: default; }
+
+.reset {
+  margin-top: 0.75rem;
+  background: transparent;
+  color: var(--accent);
+}
+
+.error {
+  color: var(--danger);
+  font-size: 0.9rem;
+  margin: 0.6rem 0 0;
+}
+
+.status {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0.6rem 0 0;
+  min-height: 1.4em;
+}
+
+.site-footer {
+  margin-top: 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ev-row, .guess-table td { transition: background-color 0.2s ease; }
+}
