@@ -38,9 +38,9 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (compatible; StatleteDataCollector/1.0; personal hobby project, not for redistribution)"
 }
 
-# World Athletics profile pages list championship titles as lines like
-# "3X" followed by a label line such as "World champion". This maps
-# the labels we care about to buckets in the output schema.
+# World Athletics profile pages list championship titles as a count
+# immediately followed by a label, e.g. "3X" + "World champion". This
+# maps the labels we care about to buckets in the output schema.
 TITLE_TO_BUCKET = {
     "Olympic champion": "olympic_gold",
     "Olympic Games silver medallist": "olympic_silver",
@@ -50,7 +50,7 @@ TITLE_TO_BUCKET = {
     "World Championships bronze medallist": "world_bronze",
 }
 
-STOP_MARKERS = ("Season", "SEE MORE", "*", "Stay updated")
+STOP_MARKERS = r"Season's bests|SEE MORE|Stay updated"
 
 
 def slugify(name):
@@ -63,22 +63,41 @@ def fetch(url, timeout=20):
     return resp.text
 
 
+def flatten(text):
+    """Collapse all whitespace/newlines to single spaces.
+
+    BeautifulSoup's get_text() inserts separators between tags in ways
+    that vary depending on the page's exact markup, so relying on an
+    exact number of newlines between labels and values is fragile.
+    Flattening to one long space-joined string and matching with
+    regex across it is far more robust to those layout differences.
+    """
+    return re.sub(r"\s+", " ", text).strip()
+
+
 def parse_name_and_country(soup):
+    """Try a couple of formats, since not every profile's meta
+    description includes a dash-separated event list (retired
+    athletes in particular sometimes don't)."""
     meta = soup.find("meta", attrs={"name": "description"})
     desc = meta["content"] if meta and meta.get("content") else ""
-    # WA formats this consistently as "NAME, Country - Event, Event, ..."
+
     m = re.match(r"^(.*?),\s*(.*?)\s*-\s*(.*)$", desc)
-    if not m:
-        return None, None, None
-    name = m.group(1).strip().title()
-    country = m.group(2).strip()
-    events = [e.strip() for e in m.group(3).split(",") if e.strip()]
-    primary_event = events[0] if events else None
-    return name, country, primary_event
+    if m:
+        name = m.group(1).strip().title()
+        country = m.group(2).strip()
+        events = [e.strip() for e in m.group(3).split(",") if e.strip()]
+        return name, country, (events[0] if events else None)
+
+    m = re.match(r"^(.*?),\s*(.*)$", desc)
+    if m:
+        return m.group(1).strip().title(), m.group(2).strip(), None
+
+    return None, None, None
 
 
-def parse_birth_date(text):
-    m = re.search(r"Born(\d{1,2} [A-Z]{3} \d{4})", text)
+def parse_birth_date(flat):
+    m = re.search(r"Born\s*(\d{1,2}\s+[A-Za-z]{3}\s+\d{4})", flat)
     if not m:
         return None
     try:
@@ -87,80 +106,56 @@ def parse_birth_date(text):
         return None
 
 
-def parse_medals(lines):
-    medals = {b: 0 for b in set(TITLE_TO_BUCKET.values())}
-    for i, line in enumerate(lines):
-        m = re.match(r"^(\d+)X$", line)
-        if m and i + 1 < len(lines):
-            bucket = TITLE_TO_BUCKET.get(lines[i + 1])
-            if bucket:
-                medals[bucket] = int(m.group(1))
+def parse_medals(flat):
+    medals = {bucket: 0 for bucket in set(TITLE_TO_BUCKET.values())}
+    labels_by_length = sorted(TITLE_TO_BUCKET, key=len, reverse=True)
+    alternation = "|".join(re.escape(label) for label in labels_by_length)
+    for m in re.finditer(rf"(\d+)X\s*({alternation})", flat):
+        bucket = TITLE_TO_BUCKET[m.group(2)]
+        medals[bucket] = max(medals[bucket], int(m.group(1)))
     return medals
 
 
-def parse_personal_bests(lines):
+def parse_personal_bests(flat):
+    """Find each Result/Date/Score anchor triple and take the event
+    name from whatever text sits between the end of the previous
+    entry and the start of this one."""
     pbs = []
-    try:
-        i = lines.index("Personal bests") + 1
-    except ValueError:
+    start_m = re.search(r"Personal bests", flat)
+    if not start_m:
         return pbs
 
-    n = len(lines)
-    while i < n:
-        if lines[i].startswith(STOP_MARKERS):
-            break
-        if i + 1 >= n or lines[i + 1] != "Result":
-            break
+    rest = flat[start_m.end():]
+    stop_m = re.search(STOP_MARKERS, rest)
+    section = rest[: stop_m.start()] if stop_m else rest
 
-        event = lines[i]
-        result_line = lines[i + 2] if i + 2 < n else ""
-        rm = re.match(r"^([\d:.]+)\s*(.*)$", result_line)
-        result, record = (rm.group(1), rm.group(2).strip()) if rm else (result_line, "")
-
-        # Scan ahead a few lines for the "Date" and "Score" labels rather
-        # than assuming a fixed offset, since some entries carry extra
-        # annotations (e.g. "* Not legal").
-        date_val, score_val = None, None
-        j = i + 3
-        limit = min(n, i + 9)
-        while j < limit:
-            if lines[j] == "Date" and j + 1 < n:
-                date_val = lines[j + 1]
-            if lines[j] == "Score" and j + 1 < n:
-                score_val = lines[j + 1]
-                j += 2
-                break
-            j += 1
-
+    entry_re = re.compile(
+        r"Result\s*([\d:.]+)\s*([A-Z*][A-Z* ]*)?\s*"
+        r"Date\s*(\d{1,2}\s+[A-Za-z]{3}\s+\d{4})\s*"
+        r"Score\s*(\d+)"
+    )
+    prev_end = 0
+    for m in entry_re.finditer(section):
+        event = section[prev_end:m.start()].strip(" -\u2022")
+        result, record = m.group(1), (m.group(2) or "").strip()
         try:
-            score_num = int(score_val) if score_val else None
+            date_iso = datetime.strptime(m.group(3), "%d %b %Y").strftime("%Y-%m-%d")
         except ValueError:
-            score_num = None
-
-        date_iso = None
-        if date_val:
-            try:
-                date_iso = datetime.strptime(date_val, "%d %b %Y").strftime("%Y-%m-%d")
-            except ValueError:
-                date_iso = None
-
-        if score_num is not None:
+            date_iso = None
+        if event:
             pbs.append({
                 "event": event,
                 "result": result,
                 "record": record,
-                "score": score_num,
+                "score": int(m.group(4)),
                 "date": date_iso,
             })
-
-        i = j if j > i else i + 1
+        prev_end = m.end()
 
     return pbs
 
 
 def guess_status(pbs):
-    if not pbs:
-        return "unknown"
     years = [int(pb["date"][:4]) for pb in pbs if pb.get("date")]
     if not years:
         return "unknown"
@@ -169,22 +164,27 @@ def guess_status(pbs):
 
 def parse_profile(html, url):
     soup = BeautifulSoup(html, "html.parser")
-    text = soup.get_text("\n")
-    lines = [l.strip() for l in text.split("\n") if l.strip()]
+    flat = flatten(soup.get_text(" "))
 
     name, country, primary_event = parse_name_and_country(soup)
     if not name:
         raise ValueError(f"Could not find a name/country on {url} — page layout may have changed.")
 
+    pbs = parse_personal_bests(flat)
+    if not primary_event and pbs:
+        # Meta description didn't give us an event list (seen on some
+        # retired athletes' profiles) — fall back to their top personal best.
+        primary_event = max(pbs, key=lambda p: p["score"])["event"]
+
     return {
         "id": slugify(name),
         "name": name,
         "country": country,
-        "birth_date": parse_birth_date(text),
+        "birth_date": parse_birth_date(flat),
         "primary_event": primary_event,
-        "medals": parse_medals(lines),
-        "status": guess_status(parse_personal_bests(lines)),
-        "personal_bests": parse_personal_bests(lines),
+        "medals": parse_medals(flat),
+        "status": guess_status(pbs),
+        "personal_bests": pbs,
         "profile_url": url,
     }
 
@@ -204,7 +204,10 @@ def main():
         print(f"[{i}/{len(urls)}] {url}", file=sys.stderr)
         try:
             html = fetch(url)
-            athletes.append(parse_profile(html, url))
+            profile = parse_profile(html, url)
+            if not profile["personal_bests"]:
+                print(f"  warning: no personal bests parsed for {profile['name']} — check manually", file=sys.stderr)
+            athletes.append(profile)
         except Exception as exc:
             print(f"  skipped: {exc}", file=sys.stderr)
         if i < len(urls):
