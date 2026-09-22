@@ -1,6 +1,10 @@
 # Statlete
 
-A Wordle-style guessing game for track and field athletes.
+A guessing game for track and field athletes: work out the mystery
+athlete from clues about country/continent, birth year, career
+medals, points score, and active/retired status. Each guess renders
+as its own card with its full personal-bests list, stacking newest
+on top — rather than merging every guess into one shared table.
 
 - **The site** (`index.html`, `style.css`, `script.js`, `data/`) is a
   static page — no build step, no backend. See below for hosting it

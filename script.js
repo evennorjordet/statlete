@@ -1,6 +1,7 @@
 // Statlete — guess the mystery track and field athlete.
 // Loads data/athletes.json, derives a few fields client-side (continent,
-// event group, display units), and runs a small Wordle-style guessing game.
+// event group, display units), and runs a small guessing game where each
+// guess renders as its own card (Spotle-style) rather than one shared table.
 
 const CONTINENTS = {
   "Norway": "Europe", "Sweden": "Europe", "Netherlands": "Europe", "Great Britain": "Europe",
@@ -15,6 +16,8 @@ const CONTINENTS = {
   "China": "Asia", "Japan": "Asia", "Qatar": "Asia", "India": "Asia",
   "Brazil": "South America", "Colombia": "South America", "Venezuela": "South America"
 };
+
+const PBS_SHOWN_BY_DEFAULT = 6;
 
 function continentOf(country) {
   return CONTINENTS[country] || "Other";
@@ -60,18 +63,18 @@ function buildAthlete(raw) {
     medals: totalMedals(raw.medals),
     score: topScore(raw.personal_bests),
     status: raw.status === "retired" ? "Retired" : "Active",
-    pbs: raw.personal_bests.map(p => ({ event: p.event, display: formatDisplay(p), score: p.score }))
+    // Sorted best-first so "show more" reveals the most impressive marks first.
+    pbs: raw.personal_bests
+      .map(p => ({ event: p.event, display: formatDisplay(p), score: p.score }))
+      .sort((a, b) => b.score - a.score)
   };
 }
 
 let athletes = [];
-let masterEvents = [];
 let target = null;
 let guessedNames = new Set();
-let revealed = {};
 
 const els = {
-  board: document.getElementById("board"),
   guesses: document.getElementById("guesses"),
   form: document.getElementById("guess-form"),
   input: document.getElementById("guess-input"),
@@ -94,88 +97,101 @@ function arrow(dir) {
   return span;
 }
 
-function numCell(td, gVal, tVal) {
-  td.textContent = gVal;
-  if (gVal === tVal) {
-    td.classList.add("match");
-  } else {
-    td.appendChild(arrow(tVal > gVal ? "up" : "down"));
+function chip(labelText, valueText, state) {
+  const span = document.createElement("span");
+  span.className = "chip" + (state ? " " + state : "");
+  const label = document.createElement("span");
+  label.className = "chip-label";
+  label.textContent = labelText;
+  span.appendChild(label);
+  span.appendChild(document.createTextNode(valueText));
+  return span;
+}
+
+function numChip(labelText, gVal, tVal) {
+  if (gVal === tVal) return chip(labelText, String(gVal), "match");
+  const c = chip(labelText, String(gVal), null);
+  c.appendChild(arrow(tVal > gVal ? "up" : "down"));
+  return c;
+}
+
+function countryChip(g) {
+  if (g.country === target.country) return chip("Country", g.country, "match");
+  if (g.continent === target.continent) return chip("Country", g.country, "partial");
+  return chip("Country", g.country, null);
+}
+
+function statusChip(g) {
+  return chip("Status", g.status, g.status === target.status ? "match" : null);
+}
+
+function pbState(pb) {
+  const targetPb = target.pbs.find(p => p.event === pb.event);
+  if (targetPb && targetPb.score === pb.score) return { state: "match", dir: null };
+  if (targetPb) return { state: "cmp", dir: targetPb.score > pb.score ? "up" : "down" };
+  return { state: groupFromEvent(pb.event) === target.group ? "partial" : "plain", dir: null };
+}
+
+function pbRow(pb) {
+  const { state, dir } = pbState(pb);
+  const row = document.createElement("div");
+  row.className = "ev-row" + (state === "match" ? " match" : state === "partial" ? " partial" : "");
+  const name = document.createElement("span");
+  name.className = "ev-name";
+  name.textContent = pb.event;
+  const val = document.createElement("span");
+  val.className = "ev-val";
+  val.textContent = pb.display;
+  if (dir) val.appendChild(arrow(dir));
+  row.appendChild(name);
+  row.appendChild(val);
+  return row;
+}
+
+function renderGuessCard(g) {
+  const placeholder = els.guesses.querySelector(".empty");
+  if (placeholder) placeholder.remove();
+
+  const card = document.createElement("div");
+  card.className = "guess-card";
+
+  const name = document.createElement("span");
+  name.className = "gc-name";
+  name.textContent = g.name;
+  card.appendChild(name);
+
+  const chips = document.createElement("div");
+  chips.className = "gc-chips";
+  chips.appendChild(countryChip(g));
+  chips.appendChild(numChip("Born", g.born, target.born));
+  chips.appendChild(numChip("Medals", g.medals, target.medals));
+  chips.appendChild(numChip("Score", g.score, target.score));
+  chips.appendChild(statusChip(g));
+  card.appendChild(chips);
+
+  const pbsHeading = document.createElement("p");
+  pbsHeading.className = "gc-pbs-heading";
+  pbsHeading.textContent = `Personal bests (${g.pbs.length})`;
+  card.appendChild(pbsHeading);
+
+  const pbsWrap = document.createElement("div");
+  g.pbs.slice(0, PBS_SHOWN_BY_DEFAULT).forEach(pb => pbsWrap.appendChild(pbRow(pb)));
+  card.appendChild(pbsWrap);
+
+  if (g.pbs.length > PBS_SHOWN_BY_DEFAULT) {
+    const remaining = g.pbs.slice(PBS_SHOWN_BY_DEFAULT);
+    const moreBtn = document.createElement("button");
+    moreBtn.type = "button";
+    moreBtn.className = "show-more";
+    moreBtn.textContent = `Show ${remaining.length} more`;
+    moreBtn.addEventListener("click", () => {
+      remaining.forEach(pb => pbsWrap.appendChild(pbRow(pb)));
+      moreBtn.remove();
+    });
+    card.appendChild(moreBtn);
   }
-}
 
-function renderGuessRow(g) {
-  const tr = document.createElement("tr");
-
-  const nameTd = document.createElement("td");
-  nameTd.className = "col-name";
-  nameTd.textContent = g.name;
-  tr.appendChild(nameTd);
-
-  const countryTd = document.createElement("td");
-  countryTd.textContent = g.country;
-  if (g.country === target.country) countryTd.classList.add("match");
-  else if (g.continent === target.continent) countryTd.classList.add("partial");
-  tr.appendChild(countryTd);
-
-  const bornTd = document.createElement("td");
-  numCell(bornTd, g.born, target.born);
-  tr.appendChild(bornTd);
-
-  const medalsTd = document.createElement("td");
-  numCell(medalsTd, g.medals, target.medals);
-  tr.appendChild(medalsTd);
-
-  const scoreTd = document.createElement("td");
-  numCell(scoreTd, g.score, target.score);
-  tr.appendChild(scoreTd);
-
-  const statusTd = document.createElement("td");
-  statusTd.textContent = g.status;
-  if (g.status === target.status) statusTd.classList.add("match");
-  tr.appendChild(statusTd);
-
-  els.guesses.prepend(tr);
-}
-
-function updateBoard(g) {
-  g.pbs.forEach(pb => {
-    const targetPb = target.pbs.find(p => p.event === pb.event);
-    let state, dir = null;
-    if (g.name === target.name || (targetPb && targetPb.score === pb.score)) {
-      state = "match";
-    } else if (targetPb) {
-      state = "cmp";
-      dir = targetPb.score > pb.score ? "up" : "down";
-    } else {
-      state = groupFromEvent(pb.event) === target.group ? "partial" : "plain";
-    }
-    revealed[pb.event] = { display: pb.display, state, dir };
-  });
-  renderBoard();
-}
-
-function renderBoard() {
-  const keys = masterEvents.filter(e => revealed[e]);
-  if (keys.length === 0) {
-    els.board.innerHTML = '<p class="empty">Guess an athlete to start revealing the events they hold a personal best in.</p>';
-    return;
-  }
-  els.board.innerHTML = "";
-  keys.forEach(e => {
-    const r = revealed[e];
-    const row = document.createElement("div");
-    row.className = "ev-row" + (r.state === "match" ? " match" : r.state === "partial" ? " partial" : "");
-    const name = document.createElement("span");
-    name.className = "ev-name";
-    name.textContent = e;
-    const val = document.createElement("span");
-    val.className = "ev-val";
-    val.textContent = r.display;
-    if (r.dir) val.appendChild(arrow(r.dir));
-    row.appendChild(name);
-    row.appendChild(val);
-    els.board.appendChild(row);
-  });
+  els.guesses.prepend(card);
 }
 
 function endGame(won) {
@@ -208,8 +224,7 @@ function submitGuess(ev) {
     return;
   }
   guessedNames.add(found.name);
-  renderGuessRow(found);
-  updateBoard(found);
+  renderGuessCard(found);
   els.input.value = "";
   if (found.name === target.name) endGame(true);
   else if (guessedNames.size >= athletes.length) endGame(false);
@@ -218,26 +233,19 @@ function submitGuess(ev) {
 function newGame() {
   pickTarget();
   guessedNames = new Set();
-  revealed = {};
-  els.guesses.innerHTML = "";
+  els.guesses.innerHTML = '<p class="empty">Make a guess to see how close you are.</p>';
   els.status.textContent = "";
   els.error.hidden = true;
   els.reset.hidden = true;
   els.input.disabled = false;
   els.form.querySelector("button").disabled = false;
   els.input.value = "";
-  renderBoard();
 }
 
 async function init() {
   const res = await fetch("data/athletes.json");
   const data = await res.json();
   athletes = data.athletes.map(buildAthlete);
-  const seen = new Set();
-  masterEvents = [];
-  data.athletes.forEach(a => a.personal_bests.forEach(pb => {
-    if (!seen.has(pb.event)) { seen.add(pb.event); masterEvents.push(pb.event); }
-  }));
   els.list.innerHTML = athletes.map(a => `<option value="${a.name}">`).join("");
   els.form.addEventListener("submit", submitGuess);
   els.reset.addEventListener("click", newGame);
