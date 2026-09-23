@@ -1,19 +1,19 @@
 {
-  "source_note": "Scraped from worldathletics.org athlete profiles. 'status' is a rough active/retired guess based on how recent the most recent personal best is — check it by hand.",
+  "source_note": "Personal bests and birth dates scraped from worldathletics.org; Olympic/World Championship medal counts from Wikipedia's medal-record table. 'status' is a rough active/retired guess based on how recent the most recent personal best is — check it by hand.",
   "athletes": [
     {
       "id": "karsten-warholm",
       "name": "Karsten Warholm",
       "country": "Norway",
       "birth_date": "1996-02-28",
-      "primary_event": "300 Metres Hurdles",
+      "primary_event": "400 Metres Hurdles",
       "medals": {
-        "world_bronze": 0,
-        "world_silver": 0,
         "olympic_gold": 0,
         "olympic_silver": 0,
         "olympic_bronze": 0,
-        "world_gold": 0
+        "world_gold": 0,
+        "world_silver": 0,
+        "world_bronze": 0
       },
       "status": "active",
       "personal_bests": [
@@ -62,12 +62,12 @@
       "birth_date": "1999-11-10",
       "primary_event": "Pole Vault",
       "medals": {
-        "world_bronze": 0,
-        "world_silver": 0,
         "olympic_gold": 0,
         "olympic_silver": 0,
         "olympic_bronze": 0,
-        "world_gold": 0
+        "world_gold": 0,
+        "world_silver": 0,
+        "world_bronze": 0
       },
       "status": "active",
       "personal_bests": [
@@ -107,14 +107,14 @@
       "name": "Jakob Ingebrigtsen",
       "country": "Norway",
       "birth_date": "2000-09-19",
-      "primary_event": "5 Kilometres Road",
+      "primary_event": "Mile Short Track",
       "medals": {
-        "world_bronze": 0,
-        "world_silver": 0,
         "olympic_gold": 0,
         "olympic_silver": 0,
         "olympic_bronze": 0,
-        "world_gold": 0
+        "world_gold": 0,
+        "world_silver": 0,
+        "world_bronze": 0
       },
       "status": "active",
       "personal_bests": [
@@ -161,14 +161,14 @@
       "name": "Noah Lyles",
       "country": "United States",
       "birth_date": "1997-07-18",
-      "primary_event": "150 Metres",
+      "primary_event": "200 Metres",
       "medals": {
-        "world_bronze": 0,
-        "world_silver": 0,
         "olympic_gold": 0,
         "olympic_silver": 0,
         "olympic_bronze": 0,
-        "world_gold": 0
+        "world_gold": 0,
+        "world_silver": 0,
+        "world_bronze": 0
       },
       "status": "active",
       "personal_bests": [
@@ -208,14 +208,14 @@
       "name": "Sydney Mclaughlin-Levrone",
       "country": "United States",
       "birth_date": "1999-08-07",
-      "primary_event": "400 Metres",
+      "primary_event": "400 Metres Hurdles",
       "medals": {
-        "world_bronze": 0,
-        "world_silver": 0,
         "olympic_gold": 0,
         "olympic_silver": 0,
         "olympic_bronze": 0,
-        "world_gold": 0
+        "world_gold": 0,
+        "world_silver": 0,
+        "world_bronze": 0
       },
       "status": "active",
       "personal_bests": [
@@ -255,14 +255,14 @@
       "name": "Sander Skotheim",
       "country": "Norway",
       "birth_date": "2002-05-31",
-      "primary_event": "100 Metres",
+      "primary_event": "Decathlon",
       "medals": {
-        "world_bronze": 0,
-        "world_silver": 0,
         "olympic_gold": 0,
         "olympic_silver": 0,
         "olympic_bronze": 0,
-        "world_gold": 0
+        "world_gold": 0,
+        "world_silver": 0,
+        "world_bronze": 0
       },
       "status": "active",
       "personal_bests": [
@@ -309,14 +309,14 @@
       "name": "Femke Broeders-Bol",
       "country": "Netherlands",
       "birth_date": "2000-02-23",
-      "primary_event": "800 Metres",
+      "primary_event": "400 Metres Hurdles",
       "medals": {
-        "world_bronze": 0,
-        "world_silver": 0,
         "olympic_gold": 0,
         "olympic_silver": 0,
         "olympic_bronze": 0,
-        "world_gold": 0
+        "world_gold": 0,
+        "world_silver": 0,
+        "world_bronze": 0
       },
       "status": "active",
       "personal_bests": [
@@ -365,12 +365,12 @@
       "birth_date": "1992-12-18",
       "primary_event": "Shot Put",
       "medals": {
-        "world_bronze": 0,
-        "world_silver": 0,
         "olympic_gold": 0,
         "olympic_silver": 0,
         "olympic_bronze": 0,
-        "world_gold": 0
+        "world_gold": 0,
+        "world_silver": 0,
+        "world_bronze": 0
       },
       "status": "retired",
       "personal_bests": [
@@ -419,12 +419,12 @@
       "birth_date": "1986-08-21",
       "primary_event": "100 Metres",
       "medals": {
-        "world_bronze": 0,
-        "world_silver": 0,
         "olympic_gold": 0,
         "olympic_silver": 0,
         "olympic_bronze": 0,
-        "world_gold": 0
+        "world_gold": 0,
+        "world_silver": 0,
+        "world_bronze": 0
       },
       "status": "retired",
       "personal_bests": [
