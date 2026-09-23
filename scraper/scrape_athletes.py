@@ -45,6 +45,16 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (compatible; StatleteDataCollector/1.0; personal hobby project, not for redistribution)"
 }
 
+# Wikimedia's servers are known to reject or rate-limit requests from
+# cloud/CI IP ranges (GitHub Actions included) that don't send a
+# properly identified User-Agent — see
+# https://meta.wikimedia.org/wiki/User-Agent_policy. This is separate
+# from HEADERS above since it needs to look like this specific format,
+# with a real contact URL, or Wikimedia may still reject it.
+WIKI_HEADERS = {
+    "User-Agent": "StatleteDataCollector/1.0 (https://github.com/evennorjordet/statlete; personal hobby project, not for redistribution)"
+}
+
 STOP_MARKERS = r"Season's bests|SEE MORE|Stay updated"
 
 # Only these two Wikipedia medal-table categories map onto the site's
@@ -198,13 +208,19 @@ def find_wikipedia_title(name):
         resp = requests.get(
             "https://en.wikipedia.org/w/api.php",
             params={"action": "opensearch", "search": name, "limit": 1, "format": "json"},
-            headers=HEADERS, timeout=15,
+            headers=WIKI_HEADERS, timeout=15,
         )
         resp.raise_for_status()
         data = resp.json()
         titles = data[1] if len(data) > 1 else []
+        if not titles:
+            print(f"    wikipedia: opensearch returned no title for '{name}'", file=sys.stderr)
         return titles[0] if titles else None
-    except (requests.RequestException, ValueError, IndexError):
+    except requests.RequestException as exc:
+        print(f"    wikipedia: opensearch request failed ({exc})", file=sys.stderr)
+        return None
+    except (ValueError, IndexError) as exc:
+        print(f"    wikipedia: opensearch response was unexpected ({exc})", file=sys.stderr)
         return None
 
 
@@ -262,10 +278,16 @@ def fetch_medals_from_wikipedia(name):
         return None
     url = "https://en.wikipedia.org/wiki/" + urllib.parse.quote(title.replace(" ", "_"))
     try:
-        html = fetch(url)
-    except requests.RequestException:
+        resp = requests.get(url, headers=WIKI_HEADERS, timeout=20)
+        resp.raise_for_status()
+        html = resp.text
+    except requests.RequestException as exc:
+        print(f"    wikipedia: failed to fetch page '{title}' ({exc})", file=sys.stderr)
         return None
-    return parse_wikipedia_medals(html)
+    medals = parse_wikipedia_medals(html)
+    if medals is None:
+        print(f"    wikipedia: fetched '{title}' but found no Medal_record section", file=sys.stderr)
+    return medals
 
 
 def main():
